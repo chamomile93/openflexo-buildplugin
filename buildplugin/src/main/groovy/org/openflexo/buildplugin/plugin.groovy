@@ -12,12 +12,14 @@ import org.gradle.api.publish.maven.MavenPublication
  * OpenFlexo build plugin configuration
  */
 class OpenFlexoExtension {
-    String utilsVersion = ""
-    String connieVersion = ""
-    String pamelaVersion = ""
-    String ginaVersion = ""
-    String dianaVersion = ""
-    String openflexoVersion = ""
+
+    String utilsVersion = ''
+    String connieVersion = ''
+    String pamelaVersion = ''
+    String ginaVersion = ''
+    String dianaVersion = ''
+    String openflexoVersion = ''
+
 }
 
 /**
@@ -25,10 +27,10 @@ class OpenFlexoExtension {
  */
 class OpenFlexoConvention {
 
-    Project project;
+    Project project
 
     OpenFlexoConvention(project) {
-        this.project = project;
+        this.project = project
     }
 
     String docx4all() {
@@ -366,7 +368,6 @@ class OpenFlexoConvention {
         return "org.openflexo:obp2-ta-ui:${project.openflexo.openflexoVersion}"
     }
 
-
 }
 
 /**
@@ -377,10 +378,9 @@ class OpenFlexoConvention {
 class OpenFlexoBuild implements Plugin<Project> {
 
     void apply(Project project) {
+        project.extensions.create('openflexo', OpenFlexoExtension)
 
-        project.extensions.create("openflexo", OpenFlexoExtension)
-
-        project.convention.plugins.put("openflexo", new OpenFlexoConvention(project))
+        project.convention.plugins.put('openflexo', new OpenFlexoConvention(project))
 
         def containerProject = project.getTasks()
 
@@ -412,13 +412,13 @@ class OpenFlexoBuild implements Plugin<Project> {
         def doc_version = project.version
         doc_version = doc_version - '-SNAPSHOT'
 
-        String projRepo   = (new File(".").absolutePath) + './' + project.name + '_doc/'
+        String projRepo   = (new File('.').absolutePath) + './' + project.name + '_doc/'
         String docRepo   = projRepo + 'openflexo-documentation/'
         String docPath = docRepo + project.name + '/' + doc_version
         String branch = 'test'
 
         containerProject.register('buildWebsite', {
-            description = "The task for building website."
+            description = 'The task for building website.'
             group = 'Documentation'
             doLast {
                 // println '### Build Started for '+ project.name + ' ### \n'
@@ -468,7 +468,7 @@ class OpenFlexoBuild implements Plugin<Project> {
         })
 
         project.allprojects {
-            group='org.openflexo'
+            group = 'org.openflexo'
         }
 
         project.subprojects { pr ->
@@ -489,12 +489,12 @@ class OpenFlexoBuild implements Plugin<Project> {
             compileJava.options.encoding = 'UTF-8'
             tasks.withType(JavaCompile) {
                 options.encoding = 'UTF-8'
-           	}
+            }
 
             // Declares repositories to refer to
             repositories {
                 maven {
-                    url "https://maven.openflexo.org/artifactory/openflexo-deps/"
+                    url 'https://maven.openflexo.org/artifactory/openflexo-deps/'
                     credentials {
                         username = "$System.env.ARTIFACTORY_USER" // The publisher user name
                         password = "$System.env.ARTIFACTORY_PASSWORD" // The publisher password
@@ -509,8 +509,9 @@ class OpenFlexoBuild implements Plugin<Project> {
                 if (project.name != 'connie') {
                     // Beware here the object project.openfelxo is not initialized
                     testImplementation "org.openflexo:testutils:${project.ext.connieVersion}"
-                } else
+                } else {
                     testImplementation project.project(':testutils')
+                }
             }
 
             def container = getTasks()
@@ -525,35 +526,37 @@ class OpenFlexoBuild implements Plugin<Project> {
             }
 
             def uiTest = container.create('uiTest', Test, {
-                description = "UI test task."
+                description = 'UI test task.'
                 group = 'Verification'
                 ignoreFailures = true
-                maxParallelForks = 1;
-                maxHeapSize = "3g"
+                maxParallelForks = 1
+                maxHeapSize = '3g'
                 useJUnit {
                     includeCategories 'org.openflexo.test.UITest'
                 }
                 testLogging {
                     afterSuite print_result
                 }
-             })
+            })
 
             def test = container.getByName('test')
             test.configure {
                 ignoreFailures = true
-                jvmArgs += ["-Djava.awt.headless=true"]
-                maxHeapSize = "3g"
-                maxParallelForks = 4;
+                jvmArgs += ['-Djava.awt.headless=true']
+                maxHeapSize = '3g'
+                maxParallelForks = 4
                 useJUnit {
                     excludeCategories 'org.openflexo.test.UITest'
                 }
                 testLogging {
+                    showStandardStreams = true
+                    events 'passed', 'failed', 'skipped'
                     afterSuite print_result
                 }
             }
 
             def testAll = container.create('testAll', {
-                description = "Executing all test tasks."
+                description = 'Executing all test tasks.'
                 group = 'Verification'
             })
             testAll.dependsOn(uiTest)
@@ -566,7 +569,6 @@ class OpenFlexoBuild implements Plugin<Project> {
             htmlDependencyReport {
                 projects = project.allprojects
             }
-
 
             if (JavaVersion.current().isJava8Compatible()) {
                 allprojects {
@@ -593,11 +595,11 @@ class OpenFlexoBuild implements Plugin<Project> {
                 contextUrl = 'https://maven.openflexo.org/artifactory'
                 publish {
                     repository {
-                    	def repo = (project.version.endsWith('-SNAPSHOT')) ? 'openflexo-snapshot' : 'openflexo-release'
-                     	if (project.hasProperty('java10')) {
-                     	  repo = 'openflexo-java10'
-                     	}
-	                	repoKey = repo// The Artifactory repository key to publish to
+                        def repo = (project.version.endsWith('-SNAPSHOT')) ? 'openflexo-snapshot' : 'openflexo-release'
+                        if (project.hasProperty('java10')) {
+                            repo = 'openflexo-java10'
+                        }
+                        repoKey = repo// The Artifactory repository key to publish to
                         username = "$System.env.ARTIFACTORY_USER" // The publisher user name
                         password = "$System.env.ARTIFACTORY_PASSWORD" // The publisher password
                     }
@@ -613,12 +615,12 @@ class OpenFlexoBuild implements Plugin<Project> {
                         publishPom = true
                     }
                 }
-             // Does not work anymore with gradle version 6.8.1
-             //   resolve {
-             //      repoKey = 'maven'
-             //  }
+            // Does not work anymore with gradle version 6.8.1
+            //   resolve {
+            //      repoKey = 'maven'
+            //  }
             }
         }
     }
-}
 
+}
