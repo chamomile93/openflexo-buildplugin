@@ -10,6 +10,7 @@ buildscript {
 subprojects {
     group 'org.openflexo'
 
+    // TODO why is this duplicate from the OpenFlexoBuild ?
     apply plugin: 'groovy'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.artifactory'
