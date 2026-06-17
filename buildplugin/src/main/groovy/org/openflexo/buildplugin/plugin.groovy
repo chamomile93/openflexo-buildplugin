@@ -508,6 +508,7 @@ class OpenFlexoBuild implements Plugin<Project> {
             dependencies {
                 //println("====> [${project.name}]")
                 if (project.name != 'connie') {
+                    //TODO idf "not initialized", why ? consequences ?
                     // Beware here the object project.openfelxo is not initialized
                     testImplementation "org.openflexo:testutils:${project.ext.connieVersion}"
                 } else {
