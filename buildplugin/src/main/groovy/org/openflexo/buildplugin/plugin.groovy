@@ -512,6 +512,7 @@ class OpenFlexoBuild implements Plugin<Project> {
                     // Beware here the object project.openfelxo is not initialized
                     testImplementation "org.openflexo:testutils:${project.ext.connieVersion}"
                 } else {
+                    // TODO this means in the project connie there's a subproject "testutils", correct ?
                     testImplementation project.project(':testutils')
                 }
             }
