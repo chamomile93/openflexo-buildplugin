@@ -378,7 +378,7 @@ class OpenFlexoConvention {
  */
 class OpenFlexoBuild implements Plugin<Project> {
 
-    void apply(Project project) {
+    void  apply(Project project) {
         project.extensions.create('openflexo', OpenFlexoExtension)
 
         project.convention.plugins.put('openflexo', new OpenFlexoConvention(project))
