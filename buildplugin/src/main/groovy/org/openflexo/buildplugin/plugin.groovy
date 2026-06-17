@@ -29,6 +29,7 @@ class OpenFlexoConvention {
 
     Project project
 
+    //TODO where is this invoked ?
     OpenFlexoConvention(project) {
         this.project = project
     }
@@ -553,6 +554,13 @@ class OpenFlexoBuild implements Plugin<Project> {
                     events 'passed', 'failed', 'skipped'
                     afterSuite print_result
                 }
+                // debugOptions {
+                //     enabled = true
+                //     host = 'localhost'
+                //     port = 4455
+                //     server = true
+                //     suspend = true
+                // }
             }
 
             def testAll = container.create('testAll', {
