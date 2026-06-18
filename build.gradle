@@ -30,6 +30,7 @@ subprojects {
         }
     }
 
+    // TODO why seems duplicate from the OpenFlexoBuild ?
     artifactory {
         contextUrl = 'https://maven.openflexo.org/artifactory'
         publish {

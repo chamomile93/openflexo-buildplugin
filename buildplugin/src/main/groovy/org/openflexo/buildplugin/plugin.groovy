@@ -54,7 +54,8 @@ class OpenFlexoConvention {
         return "org.openflexo:flexo-p2pp:${project.openflexo.utilsVersion}"
     }
 
-    String testUtils() {
+    String 
+    testUtils() {
         return "org.openflexo:testutils:${project.openflexo.connieVersion}"
     }
 

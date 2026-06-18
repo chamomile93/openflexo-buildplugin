@@ -1,5 +1,8 @@
 version '0.3'
-
+// TODO why seems duplicate with  groovy plugin ?
+// TODO maybe the groovy plugin was a trial which then became a gradle script ?
+// TODO the gradle build script in /openflexo-buildplugin/build.gradle depends on it correct ? no
+// TODO who depends on the groovy implementation ? could I safely delete it ? probably not, seems like the part setting version is not defined elsewhere ?
 dependencies {
     implementation 'org.jfrog.buildinfo:build-info-extractor-gradle:5.2.0'
 }
